@@ -1,0 +1,55 @@
+Your infinite scroll IS working
+❌ But it's loading images too many times (triggering repeatedly)
+The Problem:
+When you scroll near the bottom, the scroll event fires many times per second, so addNewImages() gets called over and over, creating too many images at once.
+
+Solution is adding a flag 
+
+This will prevent the function from being called multiple times in quick succession. Now it will load once, wait 1 second, then allow loading again when you scroll further.
+You can remove the console.log statements now since you know it's working!
+
+Real-World Analogy:
+Think of it like a door lock:
+
+🔓 isLoading = false → Door unlocked, you can enter
+🔒 isLoading = true → Door locked, you must wait
+⏰ After 1 second → Door unlocks automatically
+
+setTimeout(() => {
+    isLoading = false; // ← Reset flag back to false
+}, 1000);
+```
+- Flag is reset to `false`
+- Now the user can trigger loading again if they scroll more
+
+## Visual Timeline:
+```
+Time: 0s
+isLoading = false
+User scrolls → Load images! → isLoading = true
+
+Time: 0.1s
+User still scrolling → Check isLoading → true → Don't load!
+
+Time: 0.2s
+User still scrolling → Check isLoading → true → Don't load!
+
+Time: 0.5s
+User still scrolling → Check isLoading → true → Don't load!
+
+Time: 1.0s
+setTimeout triggers → isLoading = false
+
+Time: 1.5s
+User scrolls more → Check isLoading → false → Load images! → isLoading = true
+
+At 100% zoom, all the images fit on your screen, but at 110% zoom they're bigger so the page becomes scrollable. This confirms the issue.
+
+These lines run as soon as the page loads (not waiting for any event). They call addNewImages() twice:
+
+First call: adds 10 images
+Second call: adds 10 more images
+Total: 20 images loaded immediately
+
+This guarantees your page will be tall enough to scroll, so the infinite scroll feature will work at 100% zoom.
+Solution: 3 HTML images + 20 loaded images = 23 total images, definitely scrollable!

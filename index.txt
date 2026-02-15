@@ -1,0 +1,44 @@
+if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 100)
+```
+
+**The three main parts:**
+
+1. **`window.scrollY`** 
+   - The number of pixels the page has been scrolled from the top
+   - If you haven't scrolled, it's 0
+   - If you've scrolled down 500px, it's 500
+
+2. **`window.innerHeight`**
+   - The height of the browser viewport (the visible area)
+   - If your browser window is 800px tall, this is 800
+
+3. **`document.documentElement.scrollHeight`**
+   - The total height of the entire document (including the parts you can't see)
+   - If your page is 3000px tall total, this is 3000
+
+**The logic:**
+```
+window.scrollY + window.innerHeight
+```
+This gives you the **bottom position of the viewport** (how far you've scrolled + the visible area height)
+```
+document.documentElement.scrollHeight - 100
+```
+This is the **total page height minus 100px** (a buffer zone)
+
+**Visual example:**
+```
+Total page height: 3000px (scrollHeight)
+Viewport height: 800px (innerHeight)
+Current scroll position: 2100px (scrollY)
+
+Bottom of viewport = 2100 + 800 = 2900px
+Trigger point = 3000 - 100 = 2900px
+
+2900 >= 2900 → TRUE! Load more images
+
+The 100 is actually arbitrary - it's just a buffer value that works well in most cases. There's nothing special about 100 specifically.
+What it does:
+
+It triggers the loading 100 pixels before the user reaches the absolute bottom
+This creates a smoother experience because images start loading while the user is still scrolling
